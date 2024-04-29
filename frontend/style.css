@@ -49,7 +49,7 @@ h1 {
 }
 
 input[type="file"] {
-    border: 1px solid #ccc; /* subtle border for the file input */
+    border: 3px solid #9b9090; /* subtle border for the file input */
     display: block;
     width: 80%; /* Adjust as needed */
     margin: 20px auto; /* Center the input horizontally and give some space */
