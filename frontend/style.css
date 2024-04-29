@@ -35,16 +35,18 @@ h1 {
 
 #uploadForm {
     background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-    border: 2px solid #fff; /* White border for the Polaroid effect */
+    border: 25px solid #ffffff; /* White border for the Polaroid effect */
+    border-bottom: 55px solid #ffffff; /* Increase the border for the bottom part */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for a slight 3D effect */
     padding: 80px; /* Increased padding */
     margin: auto; /* Center the form */
-    max-width: 800px; /* Increased width */
+    max-width: 600px; /* Increased width */
+    max-height: 800px;
     text-align: center;
 }
 
 #uploadForm h1 {
-    margin-bottom: 20px;
+    margin-bottom: 100px;
     font-size: 1.5em;
 }
 
@@ -65,6 +67,7 @@ button {
     font-size: 1em;
     transition: background-color 0.3s; /* Smooth transition for hover effect */
     font-family: 'Pacifico', cursive;
+    margin-top: 100px;
 }
 
 button:hover {
