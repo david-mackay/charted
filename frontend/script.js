@@ -28,8 +28,28 @@ function uploadImages() {
             imgElement.style.width = '200px';  // Set the width for each image
             imgElement.style.marginRight = '10px'; // Optional: Add some space between images
             preview.appendChild(imgElement);
+
+            // Send image to server
+            sendImageToServer(file);
         };
 
         reader.readAsDataURL(file);
+    });
+}
+
+function sendImageToServer(file) {
+    var formData = new FormData();
+    formData.append('file', file);
+
+    fetch('http://127.0.0.1:5000/parse', {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log('Success:', data);
+        // Optionally handle the response data, such as displaying EXIF data
+    }).catch(error => {
+        console.error('Error:', error);
     });
 }
