@@ -62,6 +62,7 @@ def parse_image():
     if file:
         file_extension = os.path.splitext(file.filename)[1].lower()
         exif_data = extract_metadata(file.read(), file_extension)
+        print(exif_data)
         return jsonify(exif_data)
 
     return jsonify({"error": "Unsupported file type"}), 400
