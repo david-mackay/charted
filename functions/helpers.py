@@ -77,20 +77,27 @@ def extract_metadata(image_bytes, file_extension):
         response = {
             "image_bytes": f"data:image/{img_format.lower()};base64,{image_string}"
         }
-        
+        exif_data = {}
         if 'exif' in img.info:
             exif_data = piexif.load(img.info['exif'])
-            response.update({"exif_data": parse_exif_data(exif_data)})
+        response.update({"exif_data": parse_exif_data(exif_data)})
         
         return response
     return {"error": "No valid image data found"}
 
 def parse_exif_data(exif_dict):
     parsed_data = {}
-    gps = exif_dict["GPS"]
-    gps = convert_gps_to_decimal(gps)
-    timestamp = (decode_datetime(exif_dict["0th"][306]))
-
-    print(gps)
+    if "GPS" in exif_dict:
+        gps = exif_dict["GPS"]
+        gps = convert_gps_to_decimal(gps)
+    else:
+        gps = None
+    if "0th" in exif_dict:
+        timestamp = (decode_datetime(exif_dict["0th"][306]))
+    else:
+        timestamp = None
+    
+    parsed_data["gps"] = gps
+    parsed_data["timestamp"] = timestamp
 
     return parsed_data

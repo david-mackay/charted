@@ -50,7 +50,7 @@ function uploadImages() {
 }
 
 function sendImagesToServer(formData) {
-    fetch('http://127.0.0.1:5000/upload_images', {
+    fetch('http://127.0.0.1:5000/parse', {
         method: 'POST',
         body: formData
     }).then(response => {

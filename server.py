@@ -8,17 +8,20 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route('/parse', methods=['POST'])
-def parse_image():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+def parse_images():
+    files = request.files.getlist('files[]')  # Use getlist to handle multiple files
+    if not files:
+        return jsonify({"error": "No files provided"}), 400
 
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+    results = []
+    for file in files:
+        if file.filename == '':
+            continue  # Skip empty files, if any
+        file_extension = os.path.splitext(file.filename)[1].lower()
+        response_data = extract_metadata(file.read(), file_extension)
+        results.append(response_data)
 
-    file_extension = os.path.splitext(file.filename)[1].lower()
-    response_data = extract_metadata(file.read(), file_extension)
-    return jsonify(response_data)
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(debug=True)
