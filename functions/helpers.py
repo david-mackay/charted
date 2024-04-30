@@ -101,3 +101,8 @@ def parse_exif_data(exif_dict):
     parsed_data["timestamp"] = timestamp
 
     return parsed_data
+
+def augment_results(results: list):
+    augmented_results = []
+    for result in results:
+        print(result)

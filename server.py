@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import os
 from flask_cors import CORS
 
-from functions.helpers import extract_metadata
+from functions.helpers import extract_metadata, augment_results
 
 app = Flask(__name__)
 CORS(app)
@@ -21,6 +21,9 @@ def parse_images():
         response_data = extract_metadata(file.read(), file_extension)
         results.append(response_data)
 
+
+    augmented_results = augment_results(results)
+    print(augmented_results)
     return jsonify(results)
 
 if __name__ == '__main__':
