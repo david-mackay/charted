@@ -23,7 +23,6 @@ def parse_images():
 
 
     augmented_results = augment_results(results)
-    print(augmented_results)
     return jsonify(results)
 
 if __name__ == '__main__':

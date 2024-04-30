@@ -6,6 +6,36 @@ import base64
 
 from datetime import datetime
 
+import googlemaps
+from datetime import datetime
+
+def coordinate_lookup(coordinates):
+
+    gmaps = googlemaps.Client(key='TODO: read_apikey from file')
+
+
+    # Look up an address with reverse geocoding
+    result = gmaps.reverse_geocode(coordinates)
+
+    if result:
+        # The formatted address
+        formatted_address = result[0].get('formatted_address', 'No address found')
+        
+        # Check for business or building name
+        # Usually, it is under 'premise' or 'point_of_interest' in address components
+        address_components = result[0].get('address_components')
+        business_name = None
+        for component in address_components:
+            if 'premise' in component['types'] or 'point_of_interest' in component['types']:
+                business_name = component['long_name']
+                break
+        print(formatted_address, business_name)
+        return {
+            'formatted_address': formatted_address,
+            'business_or_building': business_name
+        }
+
+
 def dms_to_decimal(degrees, minutes, seconds):
     """Convert DMS (Degrees, Minutes, Seconds) to Decimal Degrees."""
     return degrees + (minutes / 60) + (seconds / 3600)
@@ -103,6 +133,13 @@ def parse_exif_data(exif_dict):
     return parsed_data
 
 def augment_results(results: list):
-    augmented_results = []
+    
     for result in results:
-        print(result)
+        result["parsed_data"] = {}
+        exif_data = result["exif_data"]
+        
+        if exif_data:
+            gps = exif_data["gps"]
+            gpslookup = coordinate_lookup(gps)
+            result["parsed_data"]["location"] = gpslookup
+    return sorted(results, key= lambda x: x["exif_data"]["timestamp"])
