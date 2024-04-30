@@ -45,11 +45,6 @@ h1 {
     text-align: center;
 }
 
-#uploadForm h1 {
-    margin-bottom: 100px;
-    font-size: 1.5em;
-}
-
 input[type="file"] {
     border: 3px solid #9b9090; /* subtle border for the file input */
     display: block;
@@ -78,7 +73,24 @@ button:hover {
 #uploadForm h1 {
     background-color: transparent; /* Ensure the title has no background */
     color: #685353; /* A color that stands out */
-    font-size: 40px; /* Or any other size that fits well */
-    font-family: 'Pacifico', cursive;
-    padding: 20px;
+    font-size: 60px; /* Or any other size that fits well */
+    font-family: 'Playfair Display', cursive;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+#uploadForm h2 {
+    background-color: transparent; /* Ensure the title has no background */
+    color: #685353; /* A color that stands out */
+    font-size: 20px; /* Or any other size that fits well */
+    font-family: 'Playfair Display', cursive;
+    margin-bottom: 40px;
+}
+
+#logoImage {
+    width: 170px;
+    height: auto;
+    display: block;
+    margin: 0px auto; /* Center the logo inside the form */
+    opacity: 0.8; /* Adjust the opacity to ensure it blends well but remains visible */
 }
