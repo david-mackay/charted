@@ -34,15 +34,24 @@ h1 {
 }
 
 #uploadForm {
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    background-image: url('assets/redthread_hands.png'); /* Add this line to set the background image */
+    background-size: cover; /* Adjust the size of the background image to cover the entire form */
+    background-position: center; /* Center the background image */
+    background-color: rgba(255, 255, 255, 0.8); /* Background color with opacity */
     border: 25px solid #ffffff; /* White border for the Polaroid effect */
     border-bottom: 55px solid #ffffff; /* Increase the border for the bottom part */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for a slight 3D effect */
     padding: 80px; /* Increased padding */
     margin: auto; /* Center the form */
-    max-width: 600px; /* Increased width */
-    max-height: 800px;
+    width: 50vw; /* Full width of viewport */
+    height: 50vh; /* Full height of viewport */
+    max-width: 550px;
+    max-height: 2000px;
     text-align: center;
+    /* margin-top: 50px; */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+    margin-top: 10vh; /* Center vertically using viewport height */
 }
 
 input[type="file"] {
@@ -61,8 +70,8 @@ button {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s; /* Smooth transition for hover effect */
-    font-family: 'Pacifico', cursive;
-    margin-top: 100px;
+    font-family: 'Playfair Display', cursive;
+    margin-top: 150px;
 }
 
 button:hover {
@@ -84,11 +93,12 @@ button:hover {
     color: #685353; /* A color that stands out */
     font-size: 20px; /* Or any other size that fits well */
     font-family: 'Playfair Display', cursive;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 #logoImage {
-    width: 170px;
+    width: 190px;
     height: auto;
     display: block;
     margin: 0px auto; /* Center the logo inside the form */
