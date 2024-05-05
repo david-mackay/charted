@@ -57,37 +57,37 @@ input[type="file"] {
 }
 
 button {
-    background-color: #6B4E3D; /* Choose a color that fits the scrapbook theme */
+    background-color: #680606; /* Choose a color that fits the scrapbook theme */
     color: #fff; /* White text */
     padding: 10px 20px;
     border: none;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.5em;
     transition: background-color 0.3s; /* Smooth transition for hover effect */
-    font-family: 'Playfair Display', cursive;
+    font-family: 'Tangerine', cursive;
     vertical-align: middle;
 }
 
 button:hover {
-    background-color: #50372B; /* A darker shade when hovered */
+    background-color: #502c2b; /* A darker shade when hovered */
 }
 
 /* Optionally, you might want to style the h1 separately for more control */
 #uploadForm h1 {
     background-color: transparent; /* Ensure the title has no background */
-    color: #685353; /* A color that stands out */
-    font-size: 60px; /* Or any other size that fits well */
-    font-family: 'Playfair Display', cursive;
+    color: #680606; /* A color that stands out */
+    font-size: 120px; /* Or any other size that fits well */
+    font-family: 'Tangerine', cursive;
     margin-bottom: 5px;
     margin-top: 0px;
 }
 
 #uploadForm h2 {
     background-color: transparent; /* Ensure the title has no background */
-    color: #685353; /* A color that stands out */
-    font-size: 20px; /* Or any other size that fits well */
-    font-family: 'Playfair Display', cursive;
-    margin-top: 30px;
+    color: #680606;
+    font-size: 40px; /* Or any other size that fits well */
+    font-family: 'Tangerine', cursive;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
@@ -108,10 +108,10 @@ button:hover {
     position: relative;
     display: inline-block;
     vertical-align: middle; /* Align to the middle of the line */
-    background-color: #6B4E3D; /* Button background color */
+    background-color: #680606; /* Button background color */
     color: white; /* Button text color */
-    font-size: 16px;
-    font-family: 'Arial', sans-serif;
+    font-size: 30px;
+    font-family: 'Tangerine', cursive;
     padding: 20px; /* Adjust padding as needed */
     border-radius: 50%; /* Make the button circular */
     cursor: pointer;
