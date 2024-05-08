@@ -27,7 +27,7 @@ h1 {
 }
 
 #uploadForm {
-    background-image: url('assets/redthread_hands.png'); /* Add this line to set the background image */
+    background-image: url('assets/redstring_hands_edited.png'); /* Add this line to set the background image */
     background-size: cover; /* Adjust the size of the background image to cover the entire form */
     background-position: center; /* Center the background image */
     background-color: rgba(255, 255, 255, 0.8); /* Background color with opacity */
