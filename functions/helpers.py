@@ -1,5 +1,5 @@
 import io
-import pyheif
+#import pyheif
 from PIL import Image
 import piexif
 import base64
@@ -117,23 +117,19 @@ def extract_metadata(image_bytes, file_extension):
 
 def parse_exif_data(exif_dict):
     parsed_data = {}
+    parsed_data["gps"] = None
+    parsed_data["timestamp"] = None
+
     if "GPS" in exif_dict:
         gps = exif_dict["GPS"]
-        gps = convert_gps_to_decimal(gps)
-    else:
-        gps = None
+        parsed_data["gps"] = convert_gps_to_decimal(gps)
     if "0th" in exif_dict:
-        timestamp = (decode_datetime(exif_dict["0th"][306]))
-    else:
-        timestamp = None
-    
-    parsed_data["gps"] = gps
-    parsed_data["timestamp"] = timestamp
+        parsed_data["timestamp"] = (decode_datetime(exif_dict["0th"][306]))
 
     return parsed_data
 
 def augment_results(results: list):
-    
+    imagesWithExifData = []
     for result in results:
         result["parsed_data"] = {}
         exif_data = result["exif_data"]
@@ -142,4 +138,9 @@ def augment_results(results: list):
             gps = exif_data["gps"]
             gpslookup = coordinate_lookup(gps)
             result["parsed_data"]["location"] = gpslookup
-    return sorted(results, key= lambda x: x["exif_data"]["timestamp"])
+            imagesWithExifData.append(result)
+            
+    if not imagesWithExifData:
+        return KeyError("No images with EXIF data found")
+    
+    return sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"])
