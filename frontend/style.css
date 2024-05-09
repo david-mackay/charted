@@ -21,9 +21,23 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px; /* This replaces the marginRight in your JavaScript and is more flexible */
-    overflow: hidden; /* Prevent overflow */
-    max-width: calc(100% - 40px); /* Adjust max-width to account for padding */
+    gap: 3px;
+    overflow: hidden; /* This will prevent overflow */
+    max-width: 1000px;
+    max-height: 360px; /* Set a max height to control overflow */
+    margin: 10px 0; /* Adds vertical space around the container */
+    padding: 5px; /* Adds padding inside the container */
+    /*border: 1px solid #ccc; /* Optional: adds a border for visual debugging */
+    margin-top: 5px;
+}
+
+#preview img {
+    max-width: 100%; /* Ensures images do not exceed the width of their container */
+    width: 180px; /* Smaller width */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 100px; /* Sets a maximum height for each image */
+    object-fit: contain; /* Ensures the aspect ratio is maintained without stretching */
+    border-radius: 10px; /* Optional: rounds the corners of the images */
 }
 
 #uploadForm {
