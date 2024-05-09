@@ -9,21 +9,22 @@ from datetime import datetime
 import googlemaps
 from datetime import datetime
 
+SUPPORTED_FILE_TYPES = ['.png', '.jpg', '.jpeg']
+
 def coordinate_lookup(coordinates):
 
-    gmaps = googlemaps.Client(key='TODO: read_apikey from file')
-
+    gmaps = googlemaps.Client(key='AIzaSyCs15m1JY0Sr9xOUtY4XDFym0R2ww-kyT8')
 
     # Look up an address with reverse geocoding
-    result = gmaps.reverse_geocode(coordinates)
+    address = gmaps.reverse_geocode(coordinates)
 
-    if result:
+    if address:
         # The formatted address
-        formatted_address = result[0].get('formatted_address', 'No address found')
+        formatted_address = address[0].get('formatted_address', 'No address found')
         
         # Check for business or building name
         # Usually, it is under 'premise' or 'point_of_interest' in address components
-        address_components = result[0].get('address_components')
+        address_components = address[0].get('address_components')
         business_name = None
         for component in address_components:
             if 'premise' in component['types'] or 'point_of_interest' in component['types']:
@@ -91,7 +92,7 @@ def read_heic(file_bytes):
 
 def extract_metadata(image_bytes, file_extension):
     img = None
-    if file_extension in ['.png', '.jpg', '.jpeg']:
+    if file_extension in SUPPORTED_FILE_TYPES:
         img = Image.open(io.BytesIO(image_bytes))
     elif file_extension == '.heic':
         img = read_heic(image_bytes)
