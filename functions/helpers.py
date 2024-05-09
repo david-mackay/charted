@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+import os
 import io
 #import pyheif
 from PIL import Image
@@ -10,10 +12,12 @@ import googlemaps
 from datetime import datetime
 
 SUPPORTED_FILE_TYPES = ['.png', '.jpg', '.jpeg']
+# Access your API key
+api_key = os.getenv('API_KEY')
 
 def coordinate_lookup(coordinates):
 
-    gmaps = googlemaps.Client(key='AIzaSyCs15m1JY0Sr9xOUtY4XDFym0R2ww-kyT8')
+    gmaps = googlemaps.Client(key=api_key)
 
     # Look up an address with reverse geocoding
     address = gmaps.reverse_geocode(coordinates)
