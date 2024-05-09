@@ -41,8 +41,9 @@ function uploadImages() {
         reader.onload = function(e) {
             var imgElement = document.createElement('img');
             imgElement.src = e.target.result;
-            imgElement.style.width = '200px'; // Set the width for each image
-            imgElement.style.marginRight = '10px'; // Add some space between images
+            imgElement.style.maxWidth = '100%'; // Ensures width does not exceed container
+            imgElement.style.maxHeight = '150px'; // Ensures height is controlled
+            imgElement.style.objectFit = 'contain'; // Keeps aspect ratio intact
             preview.appendChild(imgElement);
         };
         reader.readAsDataURL(file);
