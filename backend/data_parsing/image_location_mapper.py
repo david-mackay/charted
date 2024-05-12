@@ -12,6 +12,7 @@ import googlemaps
 from datetime import datetime
 
 from backend.utility.decorators import catch_internal_errors
+from backend.utility.validators import InputImages
 
 # Access your API keygb
 api_key = os.getenv('API_KEY')
@@ -40,7 +41,6 @@ def coordinate_lookup(coordinates):
             if 'premise' in component['types'] or 'point_of_interest' in component['types']:
                 business_name = component['long_name']
                 break
-        print(formatted_address, business_name)
         return {
             'formatted_address': formatted_address,
             'business_or_building': business_name
@@ -159,13 +159,15 @@ def augment_results(results: list):
     if len(imagesWithExifData) == 0:
         return ValueError("No images with EXIF data found")
     
-    return jsonify(sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"])), 200
+    return jsonify(sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"]))
 
 @catch_internal_errors
 def find_location_and_chronologically_sort_images():
     files = request.files.getlist('files[]')  # Use getlist to handle multiple files
     if not files:
         return jsonify({"error": "No files provided"}), 400
+    
+    validated_images = InputImages(images=files)
 
     results = []
     for file in files:
