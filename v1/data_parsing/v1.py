@@ -3,28 +3,27 @@ import os
 import io
 #import pyheif
 from PIL import Image
-from flask import jsonify
+from flask import request
 import piexif
 import base64
+
 from datetime import datetime
 
 import googlemaps
 from datetime import datetime
 
-# Access your API keygb
-api_key = os.getenv('API_KEY')
+from v1.utility.decorators import catch_internal_errors
+
 SUPPORTED_FILE_TYPES = ['.png', '.jpg', '.jpeg']
+# Access your API key
+api_key = os.getenv('API_KEY')
 
 def coordinate_lookup(coordinates):
-    """
-    Look up an address based on GPS coordinates using Google Maps API.
-    Input: @davidmackay to fill out
-    Output: list of reverse geocoding results
-    """
+
     gmaps = googlemaps.Client(key=api_key)
 
     # Look up an address with reverse geocoding
-    address   = gmaps.reverse_geocode(coordinates)
+    address = gmaps.reverse_geocode(coordinates)
 
     if address:
         # The formatted address
@@ -44,8 +43,6 @@ def coordinate_lookup(coordinates):
             'business_or_building': business_name
         }
 
-    #Do not throw an error because we can still iterate over other images
-    return {}
 
 def dms_to_decimal(degrees, minutes, seconds):
     """Convert DMS (Degrees, Minutes, Seconds) to Decimal Degrees."""
@@ -124,14 +121,12 @@ def extract_metadata(image_bytes, file_extension):
         response.update({"exif_data": parse_exif_data(exif_data)})
         
         return response
-    
     return {"error": "No valid image data found"}
 
 def parse_exif_data(exif_dict):
-    parsed_data = {
-        "gps": None,
-        "timestamp": None,
-    }
+    parsed_data = {}
+    parsed_data["gps"] = None
+    parsed_data["timestamp"] = None
 
     if "GPS" in exif_dict:
         gps = exif_dict["GPS"]
@@ -149,12 +144,29 @@ def augment_results(results: list):
         
         if exif_data:
             gps = exif_data["gps"]
-            # TODO: @maggiez to validate GPS coordinates for lat/long
             gpslookup = coordinate_lookup(gps)
             result["parsed_data"]["location"] = gpslookup
             imagesWithExifData.append(result)
             
-    if len(imagesWithExifData) == 0:
-        return ValueError("No images with EXIF data found")
+    if not imagesWithExifData:
+        return KeyError("No images with EXIF data found")
     
-    return jsonify(sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"])), 200
+    return sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"])
+
+@catch_internal_errors
+def find_location_and_chronologically_sort_images():
+    files = request.files.getlist('files[]')  # Use getlist to handle multiple files
+    if not files:
+        return jsonify({"error": "No files provided"}), 400
+
+    results = []
+    for file in files:
+        if file.filename == '':
+            continue  # Skip empty files, if any
+        file_extension = os.path.splitext(file.filename)[1].lower()
+        response_data = extract_metadata(file.read(), file_extension)
+        results.append(response_data)
+
+
+    augmented_results = augment_results(results)
+    return augmented_results, 200

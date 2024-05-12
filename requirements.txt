@@ -1,0 +1,6 @@
+flask
+googlemaps
+pillow
+flask_cors
+piexif
+attrs
