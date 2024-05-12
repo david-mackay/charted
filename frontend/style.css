@@ -1,8 +1,14 @@
+html {
+    height: 100%;   /* Full height */
+    margin: 0;      /* Remove default margin */
+    padding: 0;     /* Remove default padding */
+    overflow: hidden; /* Hide scrollbars */
+}
+
 body {
+    height: 100%;   /* Full height */
     background-color: #f5f5dc; /* Light beige */
     color: #333;
-    margin: 0;
-    padding: 20px;
     text-align: center;
     background-image: 
         radial-gradient(circle, #fff 1%, transparent 1%),
@@ -148,4 +154,11 @@ button:hover {
 
 button:hover {
     background-color: #50372B; /* A darker shade when hovered */
+}
+
+#map {
+    padding: 5px;
+    height: 97vh;  /* 100% of the viewport height */
+    width: 97w;   /* 100% of the viewport width */
+    display: none;  /* Initially hidden, shown after images are uploaded */
 }
