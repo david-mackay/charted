@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from functions import helpers
-from v1.entry_points.v1 import api_v1  # Import the Blueprint
+from backend.entry_points.handler import api_v1  # Import the Blueprint
 
 app = Flask(__name__)
 CORS(app)

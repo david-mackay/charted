@@ -3,13 +3,15 @@ import os
 import io
 #import pyheif
 from PIL import Image
-from flask import jsonify
+from flask import jsonify, request
 import piexif
 import base64
 from datetime import datetime
 
 import googlemaps
 from datetime import datetime
+
+from backend.utility.decorators import catch_internal_errors
 
 # Access your API keygb
 api_key = os.getenv('API_KEY')
@@ -158,3 +160,21 @@ def augment_results(results: list):
         return ValueError("No images with EXIF data found")
     
     return jsonify(sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"])), 200
+
+@catch_internal_errors
+def find_location_and_chronologically_sort_images():
+    files = request.files.getlist('files[]')  # Use getlist to handle multiple files
+    if not files:
+        return jsonify({"error": "No files provided"}), 400
+
+    results = []
+    for file in files:
+        if file.filename == '':
+            continue  # Skip empty files, if any
+        file_extension = os.path.splitext(file.filename)[1].lower()
+        response_data = extract_metadata(file.read(), file_extension)
+        results.append(response_data)
+
+
+    augmented_results = augment_results(results)
+    return augmented_results, 200
