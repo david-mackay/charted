@@ -29,7 +29,7 @@
             <div class="upload-icon">+</div> 
         </label>
 
-        <input type="file" id="imageInput" accept="image/*" multiple>          
+        <input type="file" id="imageInput" accept="image/*"  multiple onchange="previewImages()">          
         <button type="button" onclick="uploadImages()">Upload Images</button>        
         <div id="preview"></div>
     </form>
