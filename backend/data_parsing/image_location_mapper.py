@@ -166,17 +166,17 @@ def find_location_and_chronologically_sort_images():
     files = request.files.getlist('files[]')  # Use getlist to handle multiple files
     if not files:
         return jsonify({"error": "No files provided"}), 400
-    
+
+    # Validate files using InputImages
     validated_images = InputImages(images=files)
 
     results = []
-    for file in files:
+    for file in validated_images.images:
         if file.filename == '':
             continue  # Skip empty files, if any
         file_extension = os.path.splitext(file.filename)[1].lower()
         response_data = extract_metadata(file.read(), file_extension)
         results.append(response_data)
-
 
     augmented_results = augment_results(results)
     return augmented_results, 200
