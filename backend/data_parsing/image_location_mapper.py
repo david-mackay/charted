@@ -14,7 +14,7 @@ from datetime import datetime
 from backend.utility.decorators import catch_internal_errors
 from backend.utility.validators import InputImages
 
-# Access your API keygb
+# Access your API key
 api_key = os.getenv('API_KEY')
 SUPPORTED_FILE_TYPES = ['.png', '.jpg', '.jpeg']
 
@@ -124,7 +124,6 @@ def extract_metadata(image_bytes, file_extension):
         if 'exif' in img.info:
             exif_data = piexif.load(img.info['exif'])
         response.update({"exif_data": parse_exif_data(exif_data)})
-        
         return response
     
     return {"error": "No valid image data found"}
@@ -134,13 +133,13 @@ def parse_exif_data(exif_dict):
         "gps": None,
         "timestamp": None,
     }
-
-    if "GPS" in exif_dict:
+    print("parsed_data", parsed_data)
+    if "GPS" in exif_dict and exif_dict["GPS"] != {}:
         gps = exif_dict["GPS"]
         parsed_data["gps"] = convert_gps_to_decimal(gps)
-    if "0th" in exif_dict:
-        parsed_data["timestamp"] = (decode_datetime(exif_dict["0th"][306]))
-
+    if "0th" in exif_dict and exif_dict["0th"] != {}:
+        if 306 in exif_dict["0th"]:
+            parsed_data["timestamp"] = (decode_datetime(exif_dict["0th"][306]))
     return parsed_data
 
 def augment_results(results: list):
@@ -149,17 +148,19 @@ def augment_results(results: list):
         result["parsed_data"] = {}
         exif_data = result["exif_data"]
         
-        if exif_data:
+        # We need to check if the timestamp exists and it is not none
+        if exif_data["timestamp"] and exif_data["gps"]:
+            print(exif_data)
             gps = exif_data["gps"]
             # TODO: @maggiez to validate GPS coordinates for lat/long
             gpslookup = coordinate_lookup(gps)
             result["parsed_data"]["location"] = gpslookup
             imagesWithExifData.append(result)
-            
+
     if len(imagesWithExifData) == 0:
-        return ValueError("No images with EXIF data found")
+        return jsonify({"error": "No images with EXIF data found"}), 422
     
-    return jsonify(sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"]))
+    return jsonify(sorted(imagesWithExifData, key= lambda x: x["exif_data"]["timestamp"])), 200
 
 @catch_internal_errors
 def find_location_and_chronologically_sort_images():
@@ -178,5 +179,9 @@ def find_location_and_chronologically_sort_images():
         response_data = extract_metadata(file.read(), file_extension)
         results.append(response_data)
 
-    augmented_results = augment_results(results)
-    return augmented_results, 200
+    augmented_response, status_code = augment_results(results)
+    if "error" in augmented_response.json:
+        print("Error found:", augmented_response.json["error"])  # Log or handle the error
+        return augmented_response, status_code  # Return the error response directly
+
+    return augmented_response, 200  # Return with status code 200 on success
