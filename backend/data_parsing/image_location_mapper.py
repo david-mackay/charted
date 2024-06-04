@@ -185,3 +185,4 @@ def find_location_and_chronologically_sort_images():
         return augmented_response, status_code  # Return the error response directly
 
     return augmented_response, 200  # Return with status code 200 on success
+
