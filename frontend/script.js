@@ -1,5 +1,4 @@
 // previewImages function is called when the user selects images for uploading.
-// It validates the images and displays a preview of the selected images.
 function previewImages() {
     var files = document.getElementById('imageInput').files;
     var preview = document.getElementById('preview');
@@ -8,7 +7,7 @@ function previewImages() {
     if (files.length == 0) {
         alert('Please select at least one image.');
         return;
-    } 
+    }
 
     if (files.length > 10) {
         alert('Please select no more than 10 images.');
@@ -41,7 +40,6 @@ function previewImages() {
 }
 
 // uploadImages function is called when the user clicks the upload button.
-// It uploads the selected images to the server.
 function uploadImages() {
     var files = document.getElementById('imageInput').files;
     if (files.length === 0) {
@@ -75,26 +73,59 @@ function sendImagesToServer(formData) {
 
             // Hide the upload form and show the map area
             uploadForm.style.display = 'none';
-            // Define the mapArea variable here
             var mapArea = document.getElementById('map');  // Ensure this ID matches your HTML
             mapArea.style.display = 'block';  // Show the map area
-            initMap();
+            initMap(data); // Pass the data to the initMap function
         }
     }).catch(error => {
         console.error('Error:', error);
     });
 }
 
-async function initMap() {
-    console.log("map called")
+async function initMap(data) {
     const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-    map = new Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 }, //TODO: return center based on some other info
+    const center = { lat: -34.397, lng: 150.644 }; // Default center, you might want to set this dynamically based on your data
+
+    const map = new Map(document.getElementById("map"), {
+        center: center,
         zoom: 8,
+        mapId: "DEMO_MAP_ID" // Replace with our own map ID
     });
 
-    google.maps.event.trigger(map, 'resize'); // Trigger a resize event after the map has been shown
-    map.setCenter({ lat: -34.397, lng: 150.644 }); // Re-center the map
-    console.log("map returned")
+    // Add markers for each image with GPS data
+    data.forEach(imageData => {
+        if (imageData.exif_data && imageData.exif_data.gps) {
+            const location = imageData.exif_data.gps;
+            console.log('Location:', location); // Debug: log location data
+
+            if (typeof location === 'string') {
+                const [lat, lng] = location.split(',').map(Number);
+
+                const marker = new AdvancedMarkerElement({
+                    map: map,
+                    position: { lat: lat, lng: lng },
+                    title: 'Image Location' // You can customize the title
+                });
+            } else {
+                console.error('Location is not a string:', location); // Debug: log unexpected location format
+            }
+        } else {
+            console.error('Invalid image data or missing location:', imageData); // Debug: log invalid image data
+        }
+    });
+
+    // Adjust the map to fit all markers
+    const bounds = new google.maps.LatLngBounds();
+    data.forEach(imageData => {
+        if (imageData.exif_data && imageData.exif_data.gps) {
+            const location = imageData.exif_data.gps;
+            if (typeof location === 'string') {
+                const [lat, lng] = location.split(',').map(Number);
+                bounds.extend({ lat: lat, lng: lng });
+            }
+        }
+    });
+    map.fitBounds(bounds);
 }
