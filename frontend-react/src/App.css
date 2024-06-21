@@ -1,0 +1,205 @@
+html {
+  height: 100%;   /* Full height */
+  margin: 0;      /* Remove default margin */
+  padding: 0;     /* Remove default padding */
+  overflow: hidden; /* Hide scrollbars */
+}
+
+body {
+  font-family: 'Pacifico', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;   /* Full height */
+  background-color: #f5f5dc; /* Light beige */
+  color: #333;
+  text-align: center;
+  background-image: 
+      radial-gradient(circle, #fff 1%, transparent 1%),
+      radial-gradient(circle, #fff 1%, transparent 1%);
+  background-position: 0 0, 5px 5px;
+  background-image: url('./assets/scrapbook_coverpage.avif');
+  background-repeat: repeat;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+h1 {
+  font-size: 48px;
+  color: #6B4E3D; /* Warm color for the slogan */
+}
+
+#preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px;
+  overflow: hidden; /* This will prevent overflow */
+  max-width: 1000px;
+  max-height: 360px; /* Set a max height to control overflow */
+  margin: 10px 0; /* Adds vertical space around the container */
+  padding: 5px; /* Adds padding inside the container */
+  margin-top: 5px;
+}
+
+#preview img {
+  max-width: 100%; /* Ensures images do not exceed the width of their container */
+  width: 180px; /* Smaller width */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 100px; /* Sets a maximum height for each image */
+  object-fit: contain; /* Ensures the aspect ratio is maintained without stretching */
+  border-radius: 10px; /* Optional: rounds the corners of the images */
+}
+
+#uploadForm {
+  background-image: url('./assets/redstring_hands_edited.png'); /* Add this line to set the background image */
+  background-size: cover; /* Adjust the size of the background image to cover the entire form */
+  background-position: center; /* Center the background image */
+  background-color: rgba(255, 255, 255, 0.8); /* Background color with opacity */
+  border: 25px solid #ffffff; /* White border for the Polaroid effect */
+  border-bottom: 55px solid #ffffff; /* Increase the border for the bottom part */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for a slight 3D effect */
+  padding: 80px; /* Increased padding */
+  margin: auto; /* Center the form */
+  width: 60vw; /* Full width of viewport */
+  height: 60vh; /* Full height of viewport */
+  max-width: 550px;
+  max-height: 2000px;
+  text-align: center;
+  margin-left: auto; /* Center horizontally */
+  margin-right: auto; /* Center horizontally */
+  margin-top: 5vh; /* Center vertically using viewport height */
+  width: calc(33.33% * 3); 
+}
+
+input[type="file"] {
+  border: 3px solid #9b9090; /* subtle border for the file input */
+  display: block;
+  width: 80%; /* Adjust as needed */
+  margin: 20px auto; /* Center the input horizontally and give some space */
+  padding: 10px; /* Make the file input taller */
+}
+
+button {
+  background-color: #680606; /* Choose a color that fits the scrapbook theme */
+  color: #fff; /* White text */
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  font-family: 'Tangerine', cursive;
+  vertical-align: middle;
+}
+
+button:hover {
+  background-color: #502c2b; /* A darker shade when hovered */
+}
+
+/* Optionally, you might want to style the h1 separately for more control */
+#uploadForm h1 {
+  background-color: transparent; /* Ensure the title has no background */
+  color: #680606; /* A color that stands out */
+  font-size: 120px; /* Or any other size that fits well */
+  font-family: 'Tangerine', cursive;
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+
+#uploadForm h2 {
+  background-color: transparent; /* Ensure the title has no background */
+  color: #680606;
+  font-size: 40px; /* Or any other size that fits well */
+  font-family: 'Tangerine', cursive;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#logoImage {
+  width: 190px;
+  height: auto;
+  display: block;
+  margin: 0px auto; /* Center the logo inside the form */
+  opacity: 0.8; /* Adjust the opacity to ensure it blends well but remains visible */
+}
+
+/* Hide the default file input */
+#imageInput {
+  display: none;
+}
+
+/* Style for the custom button container */
+.custom-file-input {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle; /* Align to the middle of the line */
+  background-color: #680606; /* Button background color */
+  color: white; /* Button text color */
+  font-size: 30px;
+  font-family: 'Tangerine', cursive;
+  padding: 20px; /* Adjust padding as needed */
+  border-radius: 50%; /* Make the button circular */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Change button background color on hover */
+.custom-file-input:hover {
+  background-color: #50372B; /* Hover background color */
+}
+
+/* Style for the "+" symbol */
+.upload-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+}
+
+button:hover {
+  background-color: #50372B; /* A darker shade when hovered */
+}
+
+#map {
+  padding: 5px;
+  height: 97vh;  /* 100% of the viewport height */
+  width: 97vw;   /* 100% of the viewport width */
+  display: none;  /* Initially hidden, shown after images are uploaded */
+}
+
+#image-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#image-preview-container {
+  display: flex;
+  align-items: center;
+}
+
+#prev-button, #next-button {
+  background-color: #680606;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+#image-preview {
+  max-width: 200px;
+  max-height: 200px;
+}

@@ -1,0 +1,122 @@
+.uploadForm {
+    background-image: url('../assets/redstring_hands_edited.png');
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 25px solid #ffffff;
+    border-bottom: 55px solid #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 80px;
+    margin: auto;
+    width: 60vw;
+    height: 60vh;
+    max-width: 550px;
+    max-height: 2000px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5vh;
+    width: calc(33.33% * 3);
+}
+
+.imageInput {
+    border: 3px solid #9b9090;
+    display: block;
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+button {
+    background-color: #680606;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: background-color 0.3s;
+    font-family: 'Tangerine', cursive;
+    vertical-align: middle;
+}
+
+button:hover {
+    background-color: #502c2b;
+}
+
+.uploadForm h1 {
+    background-color: transparent;
+    color: #680606;
+    font-size: 120px;
+    font-family: 'Tangerine', cursive;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.uploadForm h2 {
+    background-color: transparent;
+    color: #680606;
+    font-size: 40px;
+    font-family: 'Tangerine', cursive;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#logoImage {
+    width: 190px;
+    height: auto;
+    display: block;
+    margin: 0px auto;
+    opacity: 0.8;
+}
+
+.hiddenImageInput {
+    display: none;
+}
+
+.customFileInput {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #680606;
+    color: white;
+    font-size: 30px;
+    font-family: 'Tangerine', cursive;
+    padding: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.customFileInput:hover {
+    background-color: #50372B;
+}
+
+.uploadIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+}
+
+.preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    overflow: hidden;
+    max-width: 1000px;
+    max-height: 360px;
+    margin: 10px 0;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.preview img {
+    max-width: 100%;
+    width: 180px;
+    height: auto;
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 10px;
+}
