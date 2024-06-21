@@ -17,7 +17,7 @@ const MappedOut = () => {
 
                 if (!existingScript) {
                     const script = document.createElement('script');
-                    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCs15m1JY0Sr9xOUtY4XDFym0R2ww-kyT8&v=weekly&libraries=places`;
+                    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&v=weekly&libraries=places`;
                     script.id = 'googleMaps';
                     document.body.appendChild(script);
 
@@ -35,14 +35,13 @@ const MappedOut = () => {
         };
 
         loadGoogleMapsScript().then(() => {
-            // Google Maps script loaded successfully
+            console.log("Google Maps script loaded successfully.");
         }).catch((error) => {
             console.error(error);
         });
     }, []);
 
     const initMap = async (data) => {
-        console.log("map loading");
         if (!window.google) {
             console.error('Google Maps JavaScript API is not loaded.');
             return;
@@ -64,23 +63,23 @@ const MappedOut = () => {
         const overlay = new window.google.maps.OverlayView();
         overlay.onAdd = function() {
             const layer = document.createElement('div');
-            layer.className = styles.imageOverlay; // Use CSS module class
+            layer.className = styles.imageOverlay; 
 
             const container = document.createElement('div');
-            container.className = styles.imagePreviewContainer; // Use CSS module class
+            container.className = styles.imagePreviewContainer;
 
             const prevButton = document.createElement('button');
-            prevButton.className = styles.prevButton; // Use CSS module class
+            prevButton.className = styles.prevButton;
             prevButton.innerText = 'Previous';
             prevButton.onclick = prevImage;
 
             const nextButton = document.createElement('button');
-            nextButton.className = styles.nextButton; // Use CSS module class
+            nextButton.className = styles.nextButton;
             nextButton.innerText = 'Next';
             nextButton.onclick = nextImage;
 
             const imgElement = document.createElement('img');
-            imgElement.className = styles.imagePreview; // Use CSS module class
+            imgElement.className = styles.imagePreview;
             imgElement.src = '';
 
             container.appendChild(prevButton);
@@ -97,7 +96,8 @@ const MappedOut = () => {
         };
         overlay.draw = function() {};
         overlay.setMap(map);
-        console.log("my thing should be happening");
+
+        const bounds = new window.google.maps.LatLngBounds();
         data.forEach((imageData, index) => {
             if (imageData.exif_data && imageData.exif_data.gps) {
                 const location = imageData.exif_data.gps;
@@ -113,6 +113,8 @@ const MappedOut = () => {
                     });
 
                     imageData.marker = marker;
+                    bounds.extend({ lat, lng });
+                    console.log(`Marker added at: (${lat}, ${lng})`);
                 } else {
                     console.error('Location is not a string:', location);
                 }
@@ -121,18 +123,12 @@ const MappedOut = () => {
             }
         });
 
-        const bounds = new window.google.maps.LatLngBounds();
-        data.forEach(imageData => {
-            if (imageData.exif_data && imageData.exif_data.gps) {
-                const location = imageData.exif_data.gps;
-                if (typeof location === 'string') {
-                    const [lat, lng] = location.split(',').map(Number);
-                    bounds.extend({ lat: lat, lng: lng });
-                }
-            }
-        });
-        map.fitBounds(bounds);
-        map.panTo(data[0].marker.position);
+        if (!bounds.isEmpty()) {
+            map.fitBounds(bounds);
+            map.panTo(bounds.getCenter());
+        } else {
+            console.log('No valid GPS data found.');
+        }
     };
 
     const displayImage = (index) => {
@@ -170,12 +166,12 @@ const MappedOut = () => {
             uploaderRef.current.reset();
         }
         setIsModalOpen(true);
-        initMap(data);
-
         imageDataArray = data;
-        setTimeout(() => {
-            displayImage(imageIndex);
-        }, 0); // Delay to ensure modal is rendered
+        initMap(data).then(() => {
+            setTimeout(() => {
+                displayImage(imageIndex);
+            }, 0);
+        });
     };
 
     const closeModal = () => {

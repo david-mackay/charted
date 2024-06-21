@@ -133,7 +133,6 @@ def parse_exif_data(exif_dict):
         "gps": None,
         "timestamp": None,
     }
-    print("parsed_data", parsed_data)
     if "GPS" in exif_dict and exif_dict["GPS"] != {}:
         gps = exif_dict["GPS"]
         parsed_data["gps"] = convert_gps_to_decimal(gps)
@@ -150,7 +149,6 @@ def augment_results(results: list):
         
         # We need to check if the timestamp exists and it is not none
         if exif_data["timestamp"] and exif_data["gps"]:
-            print(exif_data)
             gps = exif_data["gps"]
             # TODO: @maggiez to validate GPS coordinates for lat/long
             gpslookup = coordinate_lookup(gps)

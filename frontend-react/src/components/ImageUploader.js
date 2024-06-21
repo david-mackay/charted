@@ -1,6 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
-// Forward ref to allow parent component to control the form visibility
 const ImageUploader = forwardRef(({ onUploadSuccess }, ref) => {
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
@@ -49,7 +48,7 @@ const ImageUploader = forwardRef(({ onUploadSuccess }, ref) => {
         alert("Server Error: " + data.error);
       } else {
         console.log('Success:', data);
-        onUploadSuccess(data); // Call the success handler with the data
+        onUploadSuccess(data); 
       }
     }).catch(error => {
       console.error('Error:', error);
