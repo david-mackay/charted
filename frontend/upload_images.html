@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Upload Prototype</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Tangerine&display=swap" rel="stylesheet">
     <script>
         (g => {
@@ -40,6 +37,16 @@
         <div id="preview"></div>
     </form>
     <div id="map"></div>
+    <!-- Image overlay structure -->
+    <div id="image-overlay">
+        <div id="image-preview-container">
+            <button id="prev-button" onclick="prevImage()">Previous</button>
+            <div id="image-carousel">
+                <!-- Images will be dynamically inserted here -->
+            </div>
+            <button id="next-button" onclick="nextImage()">Next</button>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
