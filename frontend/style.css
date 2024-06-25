@@ -37,15 +37,6 @@ h1 {
     margin-top: 5px;
 }
 
-#preview img {
-    max-width: 100%; /* Ensures images do not exceed the width of their container */
-    width: 180px; /* Smaller width */
-    height: auto; /* Maintain aspect ratio */
-    max-height: 100px; /* Sets a maximum height for each image */
-    object-fit: contain; /* Ensures the aspect ratio is maintained without stretching */
-    border-radius: 10px; /* Optional: rounds the corners of the images */
-}
-
 #uploadForm {
     background-image: url('assets/redstring_hands_edited.png'); /* Add this line to set the background image */
     background-size: cover; /* Adjust the size of the background image to cover the entire form */
@@ -164,13 +155,41 @@ button:hover {
 }
 
 #image-overlay {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: rgba(255, 255, 255, 0.8);
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: none; /* Hide initially */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#image-carousel {
+    display: flex;
+    overflow-x: auto;
+    max-width: 300px; /* Adjust as necessary */
+    gap: 10px;
+}
+
+#image-carousel img {
+    max-width: 100px; /* Adjust as necessary */
+    max-height: 100px; /* Adjust as necessary */
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+#preview img, #image-overlay img {
+    max-width: 100%;
+    width: 180px;
+    height: auto;
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 10px;
 }
 
 #image-preview-container {
@@ -185,9 +204,13 @@ button:hover {
     padding: 10px;
     cursor: pointer;
     margin: 0 10px;
+    font-size: 1.2em;
 }
 
 #image-preview {
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 300px;
+    max-height: 300px;
+    margin: 0 10px;
+    object-fit: contain;
+    border-radius: 10px; /* Optional: adds rounded corners to the image */
 }

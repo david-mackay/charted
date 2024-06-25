@@ -1,13 +1,12 @@
 let imageIndex = 0;
 let imageDataArray = [];
 
-// previewImages function is called when the user selects images for uploading.
 function previewImages() {
     var files = document.getElementById('imageInput').files;
     var preview = document.getElementById('preview');
     preview.innerHTML = ''; // Clear existing previews
 
-    if (files.length == 0) {
+    if (files.length === 0) {
         alert('Please select at least one image.');
         return;
     }
@@ -33,9 +32,6 @@ function previewImages() {
         reader.onload = function(e) {
             var imgElement = document.createElement('img');
             imgElement.src = e.target.result;
-            imgElement.style.maxWidth = '100%'; // Ensures width does not exceed container
-            imgElement.style.maxHeight = '150px'; // Ensures height is controlled
-            imgElement.style.objectFit = 'contain'; // Keeps aspect ratio intact
             preview.appendChild(imgElement);
         };
         reader.readAsDataURL(file);
@@ -64,24 +60,24 @@ function sendImagesToServer(formData) {
         method: 'POST',
         body: formData
     }).then(response => {
-        if (!response.ok) { // Checks if the response status code is not in the range 200-299
+        if (!response.ok) {
             throw new Error('Network response was not ok: ' + response.statusText);
-        } 
-        return response.json(); // Process the response if it's OK
+        }
+        return response.json();
     }).then(data => {
         if (data.error) {
-            alert("Server Error: " + data.error); 
+            alert("Server Error: " + data.error);
         } else {
             console.log('Success:', data);
-
-            // Hide the upload form and show the map area
-            uploadForm.style.display = 'none';
-            var mapArea = document.getElementById('map');  // Ensure this ID matches your HTML
-            mapArea.style.display = 'block';  // Show the map area
-            initMap(data); // Pass the data to the initMap function
-
+            document.getElementById('uploadForm').style.display = 'none';
+            var mapArea = document.getElementById('map');
+            mapArea.style.display = 'block';
             imageDataArray = data;
-            displayImage(imageIndex);
+            initMap(data);
+            displayImages(imageIndex);
+
+            // Show the image overlay after successful upload
+            document.getElementById('image-overlay').style.display = 'flex';
         }
     }).catch(error => {
         console.error('Error:', error);
@@ -97,40 +93,8 @@ async function initMap(data) {
     const map = new Map(document.getElementById("map"), {
         center: center,
         zoom: 8,
-        mapId: "DEMO_MAP_ID" // Replace with our own map ID
+        mapId: "DEMO_MAP_ID" // Replace with your own map ID
     });
-
-    const overlay = new google.maps.OverlayView();
-    overlay.onAdd = function() {
-        const layer = document.createElement('div');
-        layer.id = 'image-overlay';
-
-        const container = document.createElement('div');
-        container.id = 'image-preview-container';
-
-        const prevButton = document.createElement('button');
-        prevButton.id = 'prev-button';
-        prevButton.innerText = 'Previous';
-        prevButton.onclick = prevImage;
-
-        const nextButton = document.createElement('button');
-        nextButton.id = 'next-button';
-        nextButton.innerText = 'Next';
-        nextButton.onclick = nextImage;
-
-        const imgElement = document.createElement('img');
-        imgElement.id = 'image-preview';
-        imgElement.src = '';
-
-        container.appendChild(prevButton);
-        container.appendChild(imgElement);
-        container.appendChild(nextButton);
-
-        layer.appendChild(container);
-        this.getPanes().overlayLayer.appendChild(layer);
-    };
-    overlay.draw = function() {};
-    overlay.setMap(map);
 
     // Add markers for each image with GPS data
     data.forEach((imageData, index) => {
@@ -149,6 +113,7 @@ async function initMap(data) {
 
                 // Store marker reference in imageData
                 imageData.marker = marker;
+                console.log("Marker created", marker);
             } else {
                 console.error('Location is not a string:', location); // Debug: log unexpected location format
             }
@@ -156,6 +121,9 @@ async function initMap(data) {
             console.error('Invalid image data or missing location:', imageData); // Debug: log invalid image data
         }
     });
+
+    // Log the entire imageDataArray to verify markers are assigned
+    console.log("imageDataArray after marker assignment:", data);
 
     // Adjust the map to fit all markers
     const bounds = new google.maps.LatLngBounds();
@@ -171,29 +139,45 @@ async function initMap(data) {
     map.fitBounds(bounds);
 }
 
-function displayImage(index) {
-    if (imageDataArray.length === 0) return;
+function displayImages(index) {
+    if (imageDataArray.length === 0) {
+        console.error("No images in imageDataArray");
+        return;
+    }
 
-    const imagePreview = document.getElementById('image-preview');
-    imagePreview.src = imageDataArray[index].image_bytes;
+    const imageCarousel = document.getElementById('image-carousel');
+    imageCarousel.innerHTML = ''; // Clear existing images
 
-    const marker = imageDataArray[index].marker;
-    if (marker) {
+    imageDataArray.forEach((imageData, i) => {
+        const imgElement = document.createElement('img');
+        imgElement.src = imageData.image_bytes;
+        imgElement.className = i === index ? 'active' : '';
+        imageCarousel.appendChild(imgElement);
+    });
+
+    console.log("Displaying images in carousel");
+
+    const currentImageData = imageDataArray[index];
+    const marker = currentImageData.marker;
+    console.log("Marker in displayImages function:", marker);
+    if (marker && marker.map) {
         marker.map.panTo(marker.position);
-        marker.map.setZoom(10); // Adjust zoom level as needed
+        marker.map.setZoom(10);
+    } else {
+        console.warn("Marker or marker's map not found for image data", currentImageData);
     }
 }
 
 function prevImage() {
     if (imageIndex > 0) {
         imageIndex--;
-        displayImage(imageIndex);
+        displayImages(imageIndex);
     }
 }
 
 function nextImage() {
     if (imageIndex < imageDataArray.length - 1) {
         imageIndex++;
-        displayImage(imageIndex);
+        displayImages(imageIndex);
     }
 }
